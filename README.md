@@ -6,17 +6,36 @@ This is the open-source repository for decidim-hacks, based on [Decidim](https:/
 
 ## Setting up the application
 
-You will need to do some steps before having the app working properly once you've deployed it:
+This instance is intended to allow anyone interested to experiment with Decidim in a easy way by using Docker.
 
-1. Open a Rails console in the server: `bundle exec rails console`
-2. Create a System Admin user:
-```ruby
-user = Decidim::System::Admin.new(email: <email>, password: <password>, password_confirmation: <password>)
-user.save!
+### Requirements: 
+
+2. Install **Docker** and **Docker-compose**, find the official guides to install them here:
+    - [Windows 10](https://runnable.com/docker/install-docker-on-windows-10) and the [official](https://docs.docker.com/docker-for-windows/install/)
+    - [Mac OS X](https://docs.docker.com/docker-for-mac/install/) and the [official](https://runnable.com/docker/install-docker-on-macos)
+    - [Linux](https://docs.docker.com/install/linux/docker-ce/ubuntu/) (Ubuntu, find other OS in the same place)
+
+2. Clone this repository or [download and unpack it](https://github.com/Platoniq/decidim-hacks/archive/master.zip) in some place.
+
 ```
-3. Visit `<your app url>/system` and login with your system admin credentials
-4. Create a new organization. Check the locales you want to use for that organization, and select a default locale.
-5. Set the correct default host for the organization, otherwise the app will not work properly. Note that you need to include any subdomain you might be using.
-6. Fill the rest of the form and submit it.
+git clone https://github.com/Platoniq/decidim-hacks.git
+```
 
-You're good to go!
+### Init
+
+Just open a terminal where you have cloned or downloaded this repository and execute:
+
+```
+docker-compose up
+```
+
+Is going to be a while the first time...
+
+Point your browser to: http://localhost:3000
+
+## Hack something
+
+You can open the file `app/views/layouts/decidim/_head_extra.html.erb` and change something in it, then refresh your browser.
+
+Happy hacking!
+
