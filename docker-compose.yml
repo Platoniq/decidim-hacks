@@ -1,0 +1,28 @@
+version: '3.1'
+services:
+  app:
+    build: docker
+    working_dir: /code
+    container_name: decidim-hacks
+    volumes:
+      - .:/code
+      - bundle:/usr/local/bundle
+      - node_modules:/code/node_modules
+    environment:
+      - PORT=3000
+      - DATABASE_HOST=pg
+      - DATABASE_USERNAME=postgres
+      - RAILS_ENV=development
+    ports:
+      - 3000:3000
+    links:
+      - pg
+    command: ./docker/init.sh
+  pg:
+    image: postgres
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+volumes:
+  node_modules: {}
+  bundle: {}
+  pg-data: {}
