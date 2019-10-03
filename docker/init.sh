@@ -15,6 +15,9 @@ else
     echo -e "\e[32m Database just created so let's seed some data..."
     bin/rails db:seed
 fi
+echo -e "\e[33m Seeding hacks content..."
+bin/rails db:seed:hacks
+
 echo -e "\e[33m Starting rails server..."
 bundle exec puma
 # bundle exec rails server

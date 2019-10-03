@@ -1,11 +1,23 @@
-h1 {
-  &.platoniq-header {
+.platoniq-header {
+  background: white;
+  >h1 {
     text-align: center;
-    small {
-
+    font-size: 1.5rem;
+    line-height: 1em;
+    padding: 0.5em 0;
+  }
+  .credits {
+    position: absolute;
+    top: 0;
+    right:0;
+    padding: 1em;
+    a {
+      color: black;
+      vertical-align: middle;
+      margin-right: 0.5em;
     }
     img {
       max-height: 1em;
     }
-	}
+  }
 }
