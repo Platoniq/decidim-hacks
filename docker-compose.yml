@@ -17,7 +17,7 @@ services:
       - 3000:3000
     links:
       - pg
-    command: ./docker/init.sh
+    command: /code/docker/init.sh
   pg:
     image: postgres
     volumes:

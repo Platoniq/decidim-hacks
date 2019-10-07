@@ -1,5 +1,4 @@
 #!/bin/bash
-pwd
 bundle install
 echo -e "\e[33m Upgrading Decidim..."
 bin/rails decidim:upgrade
