@@ -35,6 +35,12 @@ Depending on your case you might have to add `sudo` before the command. Is going
 
 Point your browser to: http://localhost:3000
 
+> **NOTE:** If you are using Windows and Docker Toolbox, `localhost` cannot be used to access a docker container. You can use the following command (while docker is up) to change it:
+> ```
+> docker-compose exec app bin/rails db:seed:hostname-windows-toolbox
+> ```
+> After that, you can use the address http://192.168.99.100:3000 instead.
+
 ## Hack something
 
 You can open the file `app/views/layouts/decidim/_head_extra.html.erb` and change something in it, then refresh your browser.
