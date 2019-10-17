@@ -63,4 +63,19 @@ Rails.application.configure do
 
   # No precompilation on demand on first request
   config.assets.check_precompiled_asset = false
+
+  # Log to stdout to show the output in docker
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
+    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter = config.log_formatter
+    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+  end
+
+  # relaxed security on web console
+  # class Application < Rails::Application
+  # Docker Ips (standard private IPs)
+    config.web_console.permissions = %w(172.0.0.0/8 127.0.0.0/8 192.168.0.0/16)
+    config.web_console.whitelisted_ips = %w(172.0.0.0/8 127.0.0.0/8 192.168.0.0/16)
+    # config.web_console.whitelisted_ips = '127.0.0.0/8'
+  # end
 end
