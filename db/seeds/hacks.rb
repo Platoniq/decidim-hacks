@@ -33,7 +33,15 @@ if !Rails.env.production? || ENV["SEED"]
       en: '<p>This lesson covers some basics customizations.</p>'
     },
     description: {
-      en: '<p style="font-size:0.8em">Photo credits: <em>Beginners by <a href="http://www.nyphotographic.com/">Nick Youngson</a> <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> <a href="http://www.imagecreator.co.uk/">ImageCreator</a></em></p>'
+      en: '<h1>Basic hacks</h1>
+      <p><strong>Congratulations!</strong> If you are seeing this page it means that you\'ve manage to get Docker up un running</p>
+      <h2>Before you start</h2>
+      <p>Many of the exercises require 2 basic things:</p>
+      <ul>
+        <li>A proper text editor</li>
+        <li>Access to a second terminal meanwhile the one with docker-compose is running</li>
+      </ul>
+      <p style="font-size:0.8em">Photo credits: <em>Beginners by <a href="http://www.nyphotographic.com/">Nick Youngson</a> <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> <a href="http://www.imagecreator.co.uk/">ImageCreator</a></em></p>'
     },
     hero_image: image,
     banner_image: image,
@@ -64,4 +72,32 @@ if !Rails.env.production? || ENV["SEED"]
   }
   hero_content_block.save!
 
+  # Proposals for level1
+  params = {
+    name: {
+      en: "Examples"
+    },
+    manifest_name: :proposals,
+    published_at: Time.current,
+    participatory_space: level1,
+  }
+  example1 = Decidim::Component.find_by(participatory_space_type: "Decidim::ParticipatoryProcess",
+                                         participatory_space_id: level1.id,
+                                         name: {en: "Exercises"}) || Decidim::Component.create!(params)
+
+  exercises = YAML.load_file(File.join(seeds_root, 'exercises.yml'))
+  exercises.each do |key, parts|
+    puts key
+    params = {
+      component: example1,
+      title: "[#{key}] #{parts['title']}",
+      body: parts['body'],
+      answered_at: Time.current,
+      published_at: Time.current
+    }
+    proposal = Decidim::Proposals::Proposal.where("decidim_component_id=#{example1.id} AND title LIKE '[#{key}] %'").first || Decidim::Proposals::Proposal.new(params)
+    proposal.add_coauthor(organization)
+    proposal.update_attributes params
+    proposal.save!
+  end
 end

@@ -1,0 +1,21 @@
+e1:
+  title:  Change the organization languages after creation
+  body: >
+      Once you've created an organization the [system admin](/system) admin does'nt let you change the languages.
+
+      The main reason is because this operation is delicate as involve many entries in the database
+
+      However, in a newly installed system it should'nt be a problem.
+
+      To do that we will need:
+
+      1. Edit the configured languages for this Decidim installation.
+         Allowed languages can be found in https://github.com/decidim/decidim/blob/master/decidim-core/lib/decidim/core.rb#L135
+
+      2. Log into the rails console to access the database.
+
+      3. Find the organization you want to modify
+
+      4. Add/remove languages
+
+      5. Ensure the database is consistent after the modification.
