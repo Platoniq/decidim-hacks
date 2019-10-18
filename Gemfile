@@ -12,6 +12,7 @@ gem "bootsnap", "~> 1.3"
 
 gem "puma", "~> 3.0"
 gem "uglifier", "~> 4.1"
+gem "sprockets", "~> 3.7.2" # sprockets 4.0 brokes decidim
 
 gem "faker", "~> 1.9"
 

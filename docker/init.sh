@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Temp files created by the container will be erasable by external user
+umask 0000
 bundle install
 echo -e "\e[33mUpgrading Decidim..."
 bin/rails decidim:upgrade

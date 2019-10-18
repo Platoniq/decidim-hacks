@@ -1,13 +1,9 @@
 version: '3.1'
 services:
   app:
-    build: docker
-    working_dir: /code
-    container_name: decidim-hacks
+    image: "platoniq/decidim-hacks:latest"
     volumes:
       - .:/code
-      - bundle:/usr/local/bundle
-      - node_modules:/code/node_modules
     environment:
       - PORT=3000
       - DATABASE_HOST=pg
@@ -24,6 +20,4 @@ services:
     volumes:
       - pg-data:/var/lib/postgresql/data
 volumes:
-  node_modules: {}
-  bundle: {}
   pg-data: {}

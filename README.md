@@ -8,6 +8,8 @@ This is the open-source repository for decidim-hacks, based on [Decidim](https:/
 
 This instance is intended to allow anyone interested to experiment with Decidim in a easy way by using Docker.
 
+**This instance is for educational purposes and should not be used for production sites.**
+
 ### Requirements: 
 
 1. Install **Docker** and **Docker-compose**, find the official guides to install them here:
