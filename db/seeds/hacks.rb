@@ -1,9 +1,15 @@
+# frozen_string_literal: true
+
 # Tune a little the default seeds to add meaningful content
+require "decidim_hacks/parser_helper"
+
+include DecidimHacks::ParserHelper
 
 if !Rails.env.production? || ENV["SEED"]
 	puts "Creating custom content for the hacking course..."
 
   seeds_root = File.join(__dir__)
+  content_root = File.join(seeds_root, 'content')
 
 	organization = Decidim::Organization.first
   organization.name = "Hacking Decidim"
@@ -20,50 +26,41 @@ if !Rails.env.production? || ENV["SEED"]
 
   # Create/update processes that will hold the examples
   image = File.new(File.join(seeds_root, "beginners.jpg"))
+  process = YAML.load_file(File.join(content_root, 'processes.yml'))
+
   params = {
-    title: {
-      en: "Hacking examples (level 1)"
-    },
     slug: 'level1',
-    subtitle: {
-      en: "Learn some basics to customize Decidim"
-    },
-    hashtag: "#decidim-hacks",
-    short_description: {
-      en: '<p>This lesson covers some basics customizations.</p>'
-    },
-    description: {
-      en: '<h1>Basic hacks</h1>
-      <p><strong>Congratulations!</strong> If you are seeing this page it means that you\'ve manage to get Docker up un running</p>
-      <h2>Before you start</h2>
-      <p>Many of the exercises require 2 basic things:</p>
-      <ul>
-        <li>A proper text editor</li>
-        <li>Access to a second terminal meanwhile the one with docker-compose is running</li>
-      </ul>
-      <p style="font-size:0.8em">Photo credits: <em>Beginners by <a href="http://www.nyphotographic.com/">Nick Youngson</a> <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> <a href="http://www.imagecreator.co.uk/">ImageCreator</a></em></p>'
-    },
     hero_image: image,
     banner_image: image,
     promoted: true,
     organization: organization,
-    developer_group: {
-      en: "Platoniq"
-    },
-    local_area: {
-      en: "The Internet"
-    },
-    target: {
-      en: "Coders starting with Decidim"
-    },
     end_date: 2.months.from_now,
   }
+  process["level1"].each do |key, text|
+    text = multi_render(text) if key.in? ["short_description", "description"]
+    params[key] = text
+  end
+
   level1 = Decidim::ParticipatoryProcess.find_by(slug: 'level1') || Decidim::ParticipatoryProcess.create!(params.merge({
     start_date: Date.current,
     published_at: 2.weeks.ago,
   }))
   level1.update_attributes params
   level1.save!
+
+  puts "IMAGES"
+  extract_images(level1.description["en"]).each do |image|
+    puts image
+      # file uploads
+    Decidim::Attachment.find_by(title: {en: image}).try(:destroy)
+    attach = Decidim::Attachment.create!(
+        title: {en: image},
+        file: File.open(File.join(seeds_root, image)),
+        attached_to: level1
+      )
+    replace_image(level1.description["en"], image, attach.url)
+    level1.save!
+  end
 
   hero_content_block = Decidim::ContentBlock.find_by(organization: organization, manifest_name: :hero, scope: :homepage)
   # hero_content_block.images_container.background_image = File.new(File.join(seeds_root, "homepage_image.jpg"))
@@ -75,7 +72,7 @@ if !Rails.env.production? || ENV["SEED"]
   # Proposals for level1
   params = {
     name: {
-      en: "Examples"
+      en: "Exercises"
     },
     manifest_name: :proposals,
     published_at: Time.current,
@@ -85,9 +82,8 @@ if !Rails.env.production? || ENV["SEED"]
                                          participatory_space_id: level1.id,
                                          name: {en: "Exercises"}) || Decidim::Component.create!(params)
 
-  exercises = YAML.load_file(File.join(seeds_root, 'exercises.yml'))
+  exercises = YAML.load_file(File.join(content_root, 'proposals.yml'))
   exercises.each do |key, parts|
-    puts key
     params = {
       component: example1,
       title: "[#{key}] #{parts['title']}",

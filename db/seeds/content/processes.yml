@@ -1,0 +1,66 @@
+level1:
+  title:
+    en: Hacking examples (level 1)
+  subtitle:
+    en: Learn some basics to customize Decidim
+  short_description:
+    en: This lesson covers some basics customizations.
+  hashtag: "#decidim-hacks"
+  developer_group:
+    en: Platoniq
+  local_area:
+    en: The Internet
+  target:
+    en: Coders starting with Decidim
+  description:
+    en: >
+      # Basic hacks
+
+      **Congratulations!** If you are seeing this page it means that you've manage to get Docker up and running
+
+      ## Before you start:
+
+      Many of the exercises require 2 basic things:
+
+
+      1. A proper text editor, there's many (free) options available. If unsure donwload Code:
+         [Visual Studio Code](https://code.visualstudio.com/)
+
+      2. Access to a second terminal meanwhile the one with `docker-compose` is running. This will allow you to log into the emulated machine and access to the Rails console and the database.
+
+
+      ## Howtos
+
+      ### Access the Rails console
+
+      In some exercises you will be asked to access the Rails console. This is a place where to interact with Decidim directly and, mostly, interact with the database.
+
+
+      Open a new Terminal (while `docker-compose` is up) and navigate to the same folder where you have docker running.
+      Then execute the order:
+
+
+      ```
+      docker-compose exec app bin/rails c
+      ```
+
+
+      You might have to prefix `sudo` in some systems.
+
+
+      Once inside, as an example, you can try to access the organization object in the database, this is done with this command:
+
+
+      ```
+      Decidim.Organization.first
+      ```
+
+
+      The result should look similar to this:
+
+      ![](console.png)
+
+      ---
+
+
+      <span style="font-size:0.8em">Cover photo credits: *Beginners by <a href="http://www.nyphotographic.com/">Nick Youngson</a> <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> <a href="http://www.imagecreator.co.uk/">ImageCreator</a>*</span>
