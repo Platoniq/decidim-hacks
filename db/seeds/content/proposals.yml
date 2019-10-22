@@ -1,21 +1,111 @@
 e1:
+  title:  Configure available languages in the system
+  body: |
+    When creating a new organization in Decidim (in [/system](/system)), the system lets you choose between the locales defined in the file `config/initializers/decidim.rb`. This file by default is generated with 3 languages only, English, Spanish and Catalan.
+
+    So, if you want to create an organization with french language enabled, you need first to edit that file and add all the locales you need.
+
+    Languages in Decidim follow the [ISO 693-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) standard which, basically, is a code of 2 letters (ie: `en`, `ca`, `fr`, ...).
+    Allowed languages can be found in https://github.com/decidim/decidim/blob/master/decidim-core/lib/decidim/core.rb#L135
+
+    #### Add languages to the system
+
+    Open your text editor and edit the file `config/initializers/decidim.rb`
+
+    Then, add all the languages you might need in order to create a new organization:
+
+    ```ruby
+    ...
+      # Change these lines to set your preferred locales
+      config.default_locale = :en
+      config.available_locales = [:en, :ca, :es, :fr, :pt]
+    ...
+    ```
+
+    Save the file and reload rails:
+
+    ```bash
+    docker-compose exec app bin/rails restart
+    ```
+
+    > Any file modified inside the folder `config/initializers` always requires to reload rails.
+
+    #### Create your organization
+
+    Go to [/system](/system), login with the user `system@example.org` with password `decidim123456` and you'll see the available languages in the form to create a new organization.
+
+    ![](system.png)
+
+e2:
   title:  Change the organization languages after creation
-  body: >
+  body: |
       Once you've created an organization the [system admin](/system) admin does'nt let you change the languages.
 
       The main reason is because this operation is delicate as involve many entries in the database
 
-      However, in a newly installed system it should'nt be a problem.
+      However, in a newly installed system it shouldn't be a problem.
 
       To do that we will need:
 
-      1. Edit the configured languages for this Decidim installation.
-         Allowed languages can be found in https://github.com/decidim/decidim/blob/master/decidim-core/lib/decidim/core.rb#L135
+      #### 1: Edit the configured languages for this Decidim installation.
 
-      2. Log into the rails console to access the database.
+      Ensure that the file `config/initializers/decidim.rb` has all the `available_locales` that you need.
+      Check [Exercise 1](/e1) for more information.
 
-      3. Find the organization you want to modify
+      #### 2: Log into the rails console to access the database.
 
-      4. Add/remove languages
+      ```bash
+      docker-compose exec app bin/rails c
+      ```
 
-      5. Ensure the database is consistent after the modification.
+      #### 3: Find the organization you want to modify
+
+      If you have only one organization, just pick up the first from the database, and display current languages:
+
+      ```ruby
+      o = Decidim::Organization.first
+      puts o.available_locales
+      ```
+
+      ![](langs1.png)
+
+      #### 4: Add/remove languages
+
+      Add all the languages you need by appending it to the `available_locales` array:
+
+      ```ruby
+      o.available_locales << "fr"
+      o.available_locales << "de"
+      ```
+
+      You can also remove uneeded languages (although this is an operation that might break the system):
+
+      ```ruby
+      o.available_locales.delete("de")
+      puts o.available_locales
+      ```
+
+      When satisfied, save the organization and exit the console:
+
+      ```ruby
+      o.save!
+      ```
+
+      ![](langs2.png)
+
+      #### 5: Ensure the database is consistent after the modification.
+
+      This specially important if you have deleted a language.
+
+      Internally, Decidim uses and extra table in the database to store all content created in order to perform searches.
+      When we delete a language, this table is out of sync and can lead to errors, so we need to rebuild it.
+
+      To rebuild the search database, copy and paste next operations in the Rails console:
+
+      ```rails
+      Decidim::SearchableResource.destroy_all
+      Decidim::Searchable.searchable_resources.pluck(0).each do |resource|
+        resource.constantize.all.each(&:try_update_index_for_search_resource)
+      end
+      ```
+

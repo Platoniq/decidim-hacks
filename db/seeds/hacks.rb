@@ -48,19 +48,17 @@ if !Rails.env.production? || ENV["SEED"]
   level1.update_attributes params
   level1.save!
 
-  puts "IMAGES"
-  extract_images(level1.description["en"]).each do |image|
-    puts image
-      # file uploads
+  extract_images_from_html(level1.description["en"]).each do |image|
+    # file uploads
     Decidim::Attachment.find_by(title: {en: image}).try(:destroy)
     attach = Decidim::Attachment.create!(
         title: {en: image},
         file: File.open(File.join(seeds_root, image)),
         attached_to: level1
       )
-    replace_image(level1.description["en"], image, attach.url)
-    level1.save!
+    replace_html_image(level1.description["en"], image, attach.url)
   end
+  level1.save!
 
   hero_content_block = Decidim::ContentBlock.find_by(organization: organization, manifest_name: :hero, scope: :homepage)
   # hero_content_block.images_container.background_image = File.new(File.join(seeds_root, "homepage_image.jpg"))
@@ -91,8 +89,25 @@ if !Rails.env.production? || ENV["SEED"]
       answered_at: Time.current,
       published_at: Time.current
     }
-    proposal = Decidim::Proposals::Proposal.where("decidim_component_id=#{example1.id} AND title LIKE '[#{key}] %'").first || Decidim::Proposals::Proposal.new(params)
+    proposal = find_exercise(example1.id, key) || Decidim::Proposals::Proposal.new(params)
     proposal.add_coauthor(organization)
+    proposal.save!
+    extract_images_from_md(params[:body]).each do |image|
+      # file uploads
+      Decidim::Attachment.find_by(title: {en: image}).try(:destroy)
+      attach = Decidim::Attachment.create!(
+          title: {en: image},
+          file: File.open(File.join(seeds_root, image)),
+          attached_to: proposal
+        )
+      replace_md_image(params[:body], image, attach.url)
+    end
+
+    extract_links_from_md(params[:body]).each do |link|
+      # find proposal
+      exercise = find_exercise(example1.id, link.sub("/",""))
+      replace_md_link(params[:body], link, Decidim::ResourceLocatorPresenter.new(exercise).url)
+    end
     proposal.update_attributes params
     proposal.save!
   end
