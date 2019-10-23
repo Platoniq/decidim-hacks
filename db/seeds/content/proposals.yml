@@ -197,13 +197,13 @@ e3:
     Then run the update commands:
 
     ```bash
-    bundle install
+    bundle update decidim
     bin/rails decidim:upgrade
     bin/rails db:migrate
     ```
 
-    > When modifying the `Gemfile` is always required to run the command `bundle install`.
-    > The other 2 commands are only required if there's any change affecting the database
+    > When modifying the `Gemfile` is always required to run the command `bundle install` at least.
+    > When updating Decidim we are only changing the gem Decidim so we need to upgrade it, that's why we use `bundle update decidim` instead of `bundle install`. The other 2 commands ensure that any change affecting the database is applied as well (some updates do not have any change in the database).
 
 
     ### Recommendations

@@ -13,7 +13,7 @@ Rails.application.config.to_prepare do
       if proposal.component.name == {"en" => "Exercises"} && proposal.try(:official?)
         text = md_render(text)
         # hack to avoid the replacement of lines to <br> that simple_format does
-        return gsub(">\n",">").gsub("\n<","<")
+        return text.gsub(">\n",">").gsub("\n<","<")
       end
 
       text = strip_tags(text) if strip_tags
