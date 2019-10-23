@@ -1,4 +1,7 @@
 .decidim-hacks {
+	h3 {
+		margin: 1em 0;
+	}
 	h4 {
 		font-size: 1.1rem;
 		font-weight: 600;
@@ -12,15 +15,21 @@
 	}
 
 	code {
-		background: #f0f0f0;
 		line-height: 1;
 	}
 
 	pre {
+		border: 1px solid #e8e8e8;
+		background: #f0f0f0;
+		p,code {
+			line-height: 0.8;
+		}
 		code {
+			background: #f0f0f0;
 			display: block;
 			padding: 1em 0 1em 1em;
 			margin: 0;
+			border: none;
 		}
 		margin: 1em 0;
 	}
@@ -28,7 +37,7 @@
 	blockquote {
 	  background: rgba(var(--warning-rgb), 0.2);
 	  border-left: 10px solid var(--warning);
-	  margin: 0;
+	  margin: 1em 0;
 	  padding: 0.5em;
 		&:before {
 	  	content: "💡";
