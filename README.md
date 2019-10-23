@@ -53,5 +53,9 @@ Point your browser to: http://localhost:3000
 
 You can open the file `app/views/layouts/decidim/_head_extra.html.erb` and change something in it, then refresh your browser.
 
+## Contributing
+ 
+You are wellcome to contribute by posting issues or PR.
+ 
 Happy hacking!
 
