@@ -11,7 +11,7 @@ Rails.application.config.to_prepare do
     def body(links: false, extras: true, strip_tags: false)
       text = proposal.body
       # Speciall render for course exercises (markdown processing)
-      if proposal.participatory_space.slug.start_with? "level"
+      if participatory_space_slug.start_with? "level"
         text = md_render(text)
         # hack to avoid the replacement of lines to <br> that simple_format does
         return text.gsub(">\n",">").gsub("\n<","<")
@@ -23,6 +23,15 @@ Rails.application.config.to_prepare do
 
       text = Decidim::ContentRenderers::LinkRenderer.new(text).render if links
       text
+    end
+
+    def participatory_space_slug
+      if defined? current_participatory_space
+        current_participatory_space.slug
+      elsif proposal.participatory_space.present?
+        proposal.participatory_space.slug
+      end
+      ""
     end
   end
 end
