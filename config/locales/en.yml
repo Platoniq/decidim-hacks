@@ -1,6 +1,6 @@
 # Files in the config/locales directory are used for internationalization
 # and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
+# than Englishadd the necessary files in this directory.: add the necessary files in this directory.
 #
 # To use the locales, use `I18n.t`:
 #
@@ -31,3 +31,11 @@
 
 en:
   hello: "Hello world"
+  hacker_words:
+    word1: Cool tweaks
+    word2: Sexy tweaks
+    word3: Awesome tweaks
+    word4: Amazing tweaks
+    word5: Massive tweaks
+    word6: That's ok
+    word7: I get it...
