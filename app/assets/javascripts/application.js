@@ -12,5 +12,6 @@
 //
 //= require rails-ujs
 //= require activestorage
-//= require_tree .
 //= require decidim
+//= require jquery.simple-text-rotator
+//= require_tree ./autoinclude
