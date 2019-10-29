@@ -25,10 +25,6 @@ module DecidimHacks
 			text.scan(/\[Exercise [0-9+]\]\(([^\)]+)\)/).pluck 0
 		end
 
-		def find_exercise(component_id, key)
-			Decidim::Proposals::Proposal.where("decidim_component_id=#{component_id} AND title LIKE '[#{key}] %'").first
-		end
-
 		def multi_render(text)
 			if text.respond_to? :each
 				text.each do |key, value|

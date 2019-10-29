@@ -26,12 +26,11 @@ Rails.application.config.to_prepare do
     end
 
     def participatory_space_slug
-      if defined? current_participatory_space
-        current_participatory_space.slug
-      elsif proposal.participatory_space.present?
+      begin
         proposal.participatory_space.slug
+      rescue
+        ""
       end
-      ""
     end
   end
 end
