@@ -91,9 +91,9 @@ e3:
 
        https://github.com/peachananr/simple-text-rotator
 
-       a) JS file: `vendor/javascripts/jquery.simple-text-rotator.js`
+       a) JS file: `vendor/assets/javascripts/jquery.simple-text-rotator.js`
 
-       b) CSS file: `vendor/stylesheets/simpletextrotator.css`
+       b) CSS file: `vendor/assets/stylesheets/simpletextrotator.css`
 
 
     2) Edit `application.css` & `application.js` and tell them to require the downloaded files.
