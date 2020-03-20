@@ -27,6 +27,7 @@ This instance is intended to allow anyone interested to experiment with Decidim 
 
 ```
 git clone https://github.com/Platoniq/decidim-hacks.git
+cd decidim-hacks
 ```
 
 ### Running the application
